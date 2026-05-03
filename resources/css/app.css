@@ -1,0 +1,141 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-slate-50 text-slate-900 antialiased selection:bg-indigo-500/30;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  html.dark body {
+    /* Deep midnight luxury background */
+    @apply bg-[#020617] text-slate-50 selection:bg-indigo-500/30;
+  }
+}
+
+:root {
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --glass-bg: rgba(255, 255, 255, 0.03);
+  --glass-blur: 24px;
+}
+
+html.light {
+  --glass-border: rgba(0, 0, 0, 0.05);
+  --glass-bg: rgba(255, 255, 255, 0.95);
+}
+
+/* Ambient Background Glows */
+.ambient-glow {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+html.dark .ambient-glow::before {
+  content: '';
+  position: absolute;
+  top: -10%;
+  left: -10%;
+  width: 50vw;
+  height: 50vw;
+  background: radial-gradient(circle, rgba(79, 70, 229, 0.15) 0%, rgba(0, 0, 0, 0) 60%);
+  filter: blur(100px);
+}
+
+html.dark .ambient-glow::after {
+  content: '';
+  position: absolute;
+  bottom: -10%;
+  right: -10%;
+  width: 50vw;
+  height: 50vw;
+  background: radial-gradient(circle, rgba(139, 92, 246, 0.15) 0%, rgba(0, 0, 0, 0) 60%);
+  filter: blur(100px);
+}
+
+.ambient-glow::after {
+  content: '';
+  position: absolute;
+  bottom: -10%;
+  right: -10%;
+  width: 50vw;
+  height: 50vw;
+  background: radial-gradient(circle, rgba(236, 72, 153, 0.12) 0%, rgba(0, 0, 0, 0) 60%);
+  filter: blur(100px);
+}
+
+html.dark .glass-panel {
+  @apply bg-slate-900/40 backdrop-blur-3xl border border-white/5;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+}
+
+html.light .glass-panel {
+  @apply bg-white/60 backdrop-blur-2xl border border-slate-200/50;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.04);
+}
+
+.glass-premium {
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.15);
+}
+
+.glass-navbar {
+  @apply bg-white/95 dark:bg-slate-900/95 backdrop-blur-2xl border-b border-white/10 shadow-lg;
+  z-index: 50;
+}
+
+.text-gradient {
+  @apply bg-clip-text text-transparent bg-gradient-to-r from-violet-400 via-fuchsia-400 to-rose-400;
+}
+
+.text-rev {
+  @apply bg-clip-text text-transparent bg-gradient-to-r from-violet-600 via-fuchsia-500 to-orange-500;
+}
+
+.bg-rev {
+  @apply bg-gradient-to-r from-violet-600 via-fuchsia-600 to-rose-500 text-white shadow-xl shadow-violet-500/20;
+}
+
+.text-sunset {
+  @apply bg-clip-text text-transparent bg-gradient-to-r from-rose-500 via-orange-500 to-amber-500;
+}
+
+.bg-sunset {
+  @apply bg-gradient-to-r from-rose-500 via-orange-500 to-amber-500 text-white shadow-lg shadow-orange-500/20;
+}
+
+.bg-sunset-vibrant {
+  @apply bg-gradient-to-tr from-[#FD5068] via-[#FF6B6B] to-[#FFD93D] text-white shadow-xl shadow-rose-500/30;
+}
+
+.bg-mesh {
+  background-image: url('/images/bg-premium.png');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+
+@layer utilities {
+  .hero-grid {
+    background-size: 40px 40px;
+    background-image: linear-gradient(to right, rgba(0, 0, 0, 0.05) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
+  }
+
+  html.dark .hero-grid {
+    background-image: linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  }
+}
