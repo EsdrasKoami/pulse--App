@@ -1,27 +1,28 @@
 #!/bin/sh
-set -e
 
-echo "🚀 Pulse — démarrage production..."
+echo "🚀 Pulse — démarrage..."
 
-# Génération clé si manquante
-php artisan key:generate --no-interaction --force 2>/dev/null || true
+PORT="${PORT:-8000}"
 
-# Migrations (non-bloquant si DB pas encore prête)
-echo "📦 Migrations..."
-php artisan migrate --force --no-interaction 2>/dev/null || echo "⚠️ Migration ignorée (DB pas prête)"
+# Lance PHP en premier (en arrière-plan)
+php -S 0.0.0.0:${PORT} -t public &
+PHP_PID=$!
 
-# Seeders optionnels
-php artisan db:seed --class=InterestSeeder --force --no-interaction 2>/dev/null || true
+echo "✅ PHP démarré sur le port ${PORT} (PID: $PHP_PID)"
 
-# Storage link
-php artisan storage:link --no-interaction 2>/dev/null || true
+# Attend 3s que PHP soit prêt
+sleep 3
 
-# Cache
-php artisan config:cache --no-interaction 2>/dev/null || true
-php artisan route:cache --no-interaction 2>/dev/null || true
-php artisan view:cache --no-interaction 2>/dev/null || true
+# Setup en arrière-plan (non-bloquant)
+(
+  echo "⚙️ Setup post-démarrage..."
+  php artisan migrate --force --no-interaction 2>&1 || echo "⚠️ Migration échouée"
+  php artisan db:seed --class=InterestSeeder --force --no-interaction 2>&1 || true
+  php artisan storage:link --no-interaction 2>&1 || true
+  php artisan config:clear --no-interaction 2>&1 || true
+  php artisan view:clear --no-interaction 2>&1 || true
+  echo "✅ Setup terminé"
+) &
 
-echo "✅ Setup terminé. Serveur sur le port ${PORT:-8000}..."
-
-# Démarrage PHP
-exec php -S 0.0.0.0:${PORT:-8000} -t public
+# Garde PHP en premier plan
+wait $PHP_PID
