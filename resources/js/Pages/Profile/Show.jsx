@@ -79,60 +79,26 @@ export default function Show({ user, isOwnProfile, isBlocked, hasBlockedMe }) {
         >
             <Head title={`${t('Mon Profil')} — Jumelage@CEGEPTR`} />
 
-                    color: #1a2f6f; font-weight: 600; font-size: 0.85rem;
-                    padding: 8px 16px; border-radius: 999px;
-                    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-                    transition: all 0.2s;
-                }
-                .prof-btn-edit:hover {
-                    border-color: #4361ee; color: #4361ee;
-                    transform: translateY(-1px);
-                }
-
-                @media (max-width: 600px) {
-                    .prof-avatar-wrap { left: 50%; transform: translateX(-50%); bottom: -60px; }
-                    .prof-header { margin-bottom: 80px; border-radius: 0; }
-                    .prof-actions { bottom: -60px; right: 50%; transform: translateX(50%); width: 100%; text-align: center; margin-top: 15px; position: static; }
-                }
-
-                .prof-card {
-                    background: #fff;
-                    border-radius: 24px;
-                    box-shadow: 0 4px 20px rgba(67,97,238,0.05);
-                    border: 1px solid rgba(221,227,240,0.8);
-                    overflow: hidden;
-                    max-width: 800px;
-                    margin: 0 auto;
-                }
-
-                .prof-chip {
-                    display: inline-flex; align-items: center; gap: 5px;
-                    padding: 5px 12px; border-radius: 999px;
-                    background: #f0f3ff; border: 1px solid #dde3f0;
-                    color: #4361ee; font-size: 0.82rem; font-weight: 600;
-                }
-            `}</style>
-
             <div className="py-8">
                 <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
-                    <div className="prof-card">
+                    <div className="bg-white dark:bg-slate-900 rounded-[2.5rem] border border-slate-100 dark:border-slate-800 shadow-2xl shadow-slate-900/5 overflow-hidden max-w-3xl mx-auto">
 
                         {/* Cover & Avatar */}
-                        <div className="prof-header">
-                            <div className="prof-avatar-wrap">
-                                <img src={avatarUrl} alt={user.name} className="prof-avatar" />
+                        <div className="relative h-44 sm:h-52 bg-gradient-to-br from-indigo-600 via-violet-600 to-fuchsia-600">
+                            <div className="absolute -bottom-12 left-6 sm:left-10 z-10">
+                                <img src={avatarUrl} alt={user.name} className="w-28 h-28 sm:w-36 sm:h-36 rounded-[2.5rem] border-[6px] border-white dark:border-slate-900 object-cover bg-white dark:bg-slate-800 shadow-2xl" />
                             </div>
-                            <div className="hidden sm:block prof-actions">
+                            <div className="hidden sm:block absolute -bottom-8 right-6 sm:right-10 z-10">
                                 {isOwnProfile ? (
-                                    <Link href={route('profile.edit')} className="prof-btn-edit">
+                                    <Link href={route('profile.edit')} className="inline-flex items-center gap-2 px-6 py-3 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl text-slate-900 dark:text-white text-xs font-black uppercase tracking-widest shadow-xl hover:shadow-2xl hover:border-indigo-500 transition-all active:scale-95">
                                         ✏️ {t('Modifier le profil')}
                                     </Link>
                                 ) : (
                                     <div className="flex gap-2">
-                                        <button onClick={() => setShowReportModal(true)} className="prof-btn-edit !text-amber-600 !border-amber-200 hover:!bg-amber-50">
+                                        <button onClick={() => setShowReportModal(true)} className="inline-flex items-center gap-2 px-6 py-3 bg-white dark:bg-slate-900 border border-amber-100 dark:border-amber-900/30 rounded-2xl text-amber-600 text-xs font-black uppercase tracking-widest shadow-xl hover:bg-amber-50 transition-all active:scale-95">
                                             ⚠️ {t('Signaler')}
                                         </button>
-                                        <button onClick={() => setShowBlockModal(true)} className={`prof-btn-edit ${isBlocked ? '!text-emerald-600 !border-emerald-200 hover:!bg-emerald-50' : '!text-rose-600 !border-rose-200 hover:!bg-rose-50'}`}>
+                                        <button onClick={() => setShowBlockModal(true)} className={`inline-flex items-center gap-2 px-6 py-3 bg-white dark:bg-slate-900 border rounded-2xl text-xs font-black uppercase tracking-widest shadow-xl transition-all active:scale-95 ${isBlocked ? 'border-emerald-100 text-emerald-600 hover:bg-emerald-50' : 'border-rose-100 text-rose-600 hover:bg-rose-50'}`}>
                                             {isBlocked ? `✅ ${t('Débloquer')}` : `🚫 ${t('Bloquer')}`}
                                         </button>
                                     </div>
@@ -141,17 +107,17 @@ export default function Show({ user, isOwnProfile, isBlocked, hasBlockedMe }) {
                         </div>
 
                         {/* Mobile Actions */}
-                        <div className="sm:hidden text-center mt-4 mb-2">
+                        <div className="sm:hidden text-center mt-16 mb-4">
                             {isOwnProfile ? (
-                                <Link href={route('profile.edit')} className="prof-btn-edit">
+                                <Link href={route('profile.edit')} className="inline-flex items-center gap-2 px-6 py-3 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl text-slate-900 dark:text-white text-xs font-black uppercase tracking-widest shadow-lg">
                                     ✏️ {t('Modifier')}
                                 </Link>
                             ) : (
                                 <div className="flex justify-center gap-2 px-4">
-                                    <button onClick={() => setShowReportModal(true)} className="prof-btn-edit !text-amber-600 !border-amber-200">
+                                    <button onClick={() => setShowReportModal(true)} className="inline-flex items-center gap-2 px-4 py-2.5 bg-white dark:bg-slate-900 border border-amber-100 rounded-2xl text-amber-600 text-[10px] font-black uppercase tracking-widest">
                                         ⚠️ {t('Signaler')}
                                     </button>
-                                    <button onClick={() => setShowBlockModal(true)} className={`prof-btn-edit ${isBlocked ? '!text-emerald-600 !border-emerald-200' : '!text-rose-600 !border-rose-200'}`}>
+                                    <button onClick={() => setShowBlockModal(true)} className={`inline-flex items-center gap-2 px-4 py-2.5 bg-white dark:bg-slate-900 border rounded-2xl text-[10px] font-black uppercase tracking-widest ${isBlocked ? 'border-emerald-100 text-emerald-600' : 'border-rose-100 text-rose-600'}`}>
                                         {isBlocked ? `✅ ${t('Débloquer')}` : `🚫 ${t('Bloquer')}`}
                                     </button>
                                 </div>
@@ -220,7 +186,7 @@ export default function Show({ user, isOwnProfile, isBlocked, hasBlockedMe }) {
                                                     </p>
                                                     <div className="flex flex-wrap gap-2">
                                                         {items.map(interest => (
-                                                            <span key={interest.id} className="prof-chip">
+                                                            <span key={interest.id} className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-indigo-50 dark:bg-indigo-950/30 border border-indigo-100 dark:border-indigo-900/30 rounded-full text-indigo-600 dark:text-indigo-400 text-xs font-black uppercase tracking-wider">
                                                                 <span>{interest.icon}</span> {interest.name}
                                                             </span>
                                                         ))}
