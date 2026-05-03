@@ -20,8 +20,7 @@ RUN apk add --no-cache \
     && docker-php-ext-configure gd \
         --with-freetype --with-jpeg \
     && docker-php-ext-install -j$(nproc) \
-        gd pdo pdo_mysql mbstring zip bcmath \
-        ctype fileinfo intl tokenizer xml \
+        gd pdo pdo_mysql mbstring zip bcmath intl \
     && rm -rf /var/cache/apk/*
 
 # Composer
