@@ -1,55 +1,56 @@
-# ── Stage 1: Node.js — Build frontend assets ─────────────────────────────────
+# ── Stage 1: Node.js — Build Vite/React assets ───────────────────────────────
 FROM node:20-alpine AS frontend
 
 WORKDIR /app
-
 COPY package*.json ./
-RUN npm ci
-
+RUN npm ci --silent
+COPY vite.config.js tailwind.config.js postcss.config.js jsconfig.json ./
 COPY resources/ resources/
 COPY public/ public/
-COPY vite.config.js .
-COPY tailwind.config.js .
-COPY postcss.config.js .
-COPY jsconfig.json .
-
 RUN npm run build
 
-# ── Stage 2: PHP — Laravel production server ──────────────────────────────────
-FROM php:8.3-cli AS app
+# ── Stage 2: PHP 8.3 Alpine — Production server ───────────────────────────────
+FROM php:8.3-fpm-alpine AS app
 
-# Install system dependencies + PHP extensions
-RUN apt-get update && apt-get install -y \
-    git curl zip unzip libpng-dev libjpeg-dev libfreetype6-dev \
-    libzip-dev libonig-dev libxml2-dev \
-    && docker-php-ext-configure gd --with-freetype --with-jpeg \
+# Alpine packages (much faster than apt-get)
+RUN apk add --no-cache \
+    git curl zip unzip bash \
+    libpng-dev libjpeg-turbo-dev freetype-dev \
+    libzip-dev oniguruma-dev icu-dev \
+    && docker-php-ext-configure gd \
+        --with-freetype --with-jpeg \
     && docker-php-ext-install -j$(nproc) \
-        gd pdo pdo_mysql mbstring zip bcmath ctype xml tokenizer fileinfo \
-    && apt-get clean && rm -rf /var/lib/apt/lists/*
+        gd pdo pdo_mysql mbstring zip bcmath \
+        ctype fileinfo intl tokenizer xml \
+    && rm -rf /var/cache/apk/*
 
-# Install Composer
+# Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www/html
 
-# Copy composer files first (layer caching)
+# Install PHP dependencies
 COPY composer.json composer.lock ./
-RUN composer install --no-dev --optimize-autoloader --no-interaction --no-scripts
+RUN composer install \
+    --no-dev \
+    --optimize-autoloader \
+    --no-interaction \
+    --no-scripts \
+    --prefer-dist
 
-# Copy the rest of the application
+# Copy application
 COPY . .
 
-# Copy compiled frontend from Stage 1
+# Copy compiled frontend assets
 COPY --from=frontend /app/public/build public/build
 
-# Set permissions
+# Permissions
 RUN chown -R www-data:www-data storage bootstrap/cache \
     && chmod -R 775 storage bootstrap/cache
 
-# Copy and set the startup script
-COPY docker-start.sh /usr/local/bin/start
-RUN chmod +x /usr/local/bin/start
+# Startup script
+COPY docker-start.sh /start.sh
+RUN chmod +x /start.sh
 
 EXPOSE 8000
-
-CMD ["/usr/local/bin/start"]
+CMD ["/start.sh"]
