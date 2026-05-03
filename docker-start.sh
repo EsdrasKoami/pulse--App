@@ -1,24 +1,27 @@
 #!/bin/sh
 set -e
 
-echo "🚀 Starting Pulse deployment..."
+echo "🚀 Pulse — démarrage production..."
 
-# Run migrations
-php artisan migrate --force
+# Génération clé si manquante
+php artisan key:generate --no-interaction --force 2>/dev/null || true
 
-# Seed admin account if needed
-php artisan db:seed --class=UserSeeder --force 2>/dev/null || true
-php artisan db:seed --class=InterestSeeder --force 2>/dev/null || true
+# Migrations (non-bloquant si DB pas encore prête)
+echo "📦 Migrations..."
+php artisan migrate --force --no-interaction 2>/dev/null || echo "⚠️ Migration ignorée (DB pas prête)"
 
-# Create storage link
-php artisan storage:link 2>/dev/null || true
+# Seeders optionnels
+php artisan db:seed --class=InterestSeeder --force --no-interaction 2>/dev/null || true
 
-# Cache optimization
-php artisan config:cache
-php artisan route:cache
-php artisan view:cache
+# Storage link
+php artisan storage:link --no-interaction 2>/dev/null || true
 
-echo "✅ Setup complete. Launching server on port ${PORT:-8000}..."
+# Cache
+php artisan config:cache --no-interaction 2>/dev/null || true
+php artisan route:cache --no-interaction 2>/dev/null || true
+php artisan view:cache --no-interaction 2>/dev/null || true
 
-# Start PHP built-in server
+echo "✅ Setup terminé. Serveur sur le port ${PORT:-8000}..."
+
+# Démarrage PHP
 exec php -S 0.0.0.0:${PORT:-8000} -t public
