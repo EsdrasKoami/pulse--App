@@ -9,8 +9,8 @@ COPY resources/ resources/
 COPY public/ public/
 RUN npm run build
 
-# ── Stage 2: PHP 8.3 Alpine — Production server ───────────────────────────────
-FROM php:8.3-fpm-alpine AS app
+# ── Stage 2: PHP 8.4 Alpine — Production server ───────────────────────────────
+FROM php:8.4-fpm-alpine AS app
 
 # Alpine packages (much faster than apt-get)
 RUN apk add --no-cache \
