@@ -3,7 +3,7 @@ FROM node:20-alpine AS frontend
 
 WORKDIR /app
 COPY package*.json ./
-RUN npm ci --silent
+RUN npm ci --legacy-peer-deps
 COPY vite.config.js tailwind.config.js postcss.config.js jsconfig.json ./
 COPY resources/ resources/
 COPY public/ public/
