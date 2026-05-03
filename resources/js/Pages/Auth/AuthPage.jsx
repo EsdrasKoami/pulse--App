@@ -85,7 +85,7 @@ function SubmitBtn({ label, processing }) {
                         <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
                     </svg>
                 )}
-                {label}
+                <span>{label}</span>
             </span>
             <div className="absolute inset-0 bg-gradient-to-r from-violet-600 to-indigo-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
         </button>

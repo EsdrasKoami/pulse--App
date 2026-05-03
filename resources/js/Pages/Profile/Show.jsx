@@ -1,4 +1,4 @@
-﻿import { Head, Link, router, usePage } from '@inertiajs/react';
+import { Head, Link, router, usePage } from '@inertiajs/react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { useState } from 'react';
 import ConfirmationModal from '@/Components/ConfirmationModal';
@@ -79,40 +79,6 @@ export default function Show({ user, isOwnProfile, isBlocked, hasBlockedMe }) {
         >
             <Head title={`${t('Mon Profil')} — Jumelage@CEGEPTR`} />
 
-            <style>{`
-                .prof-header {
-                    position: relative;
-                    height: 180px;
-                    background: linear-gradient(150deg, #3f5efb 0%, #1c3cb0 55%, #042C53 100%);
-                    border-radius: 20px 20px 0 0;
-                    margin-bottom: 60px; /* space for avatar overlap */
-                }
-                .prof-header::after {
-                    content: ''; position: absolute; inset: 0;
-                    background-image: radial-gradient(rgba(255,255,255,0.1) 1px, transparent 1px);
-                    background-size: 26px 26px; pointer-events: none;
-                }
-                .prof-avatar-wrap {
-                    position: absolute;
-                    bottom: -50px; left: 30px;
-                    z-index: 10;
-                }
-                .prof-avatar {
-                    width: 120px; height: 120px;
-                    border-radius: 50%;
-                    border: 4px solid #fff;
-                    background: #fff;
-                    object-fit: cover;
-                    box-shadow: 0 4px 14px rgba(0,0,0,0.12);
-                }
-                .prof-actions {
-                    position: absolute;
-                    bottom: -35px; right: 30px;
-                    z-index: 10;
-                }
-                .prof-btn-edit {
-                    display: inline-flex; align-items: center; gap: 6px;
-                    background: #fff; border: 1.5px solid #dde3f0;
                     color: #1a2f6f; font-weight: 600; font-size: 0.85rem;
                     padding: 8px 16px; border-radius: 999px;
                     box-shadow: 0 2px 8px rgba(0,0,0,0.05);
