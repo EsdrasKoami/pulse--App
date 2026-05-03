@@ -1,28 +1,24 @@
 #!/bin/sh
 
-echo "🚀 Pulse — démarrage..."
+echo "🚀 Pulse — démarrage production..."
 
 PORT="${PORT:-8000}"
 
-# Lance PHP en premier (en arrière-plan)
-php -S 0.0.0.0:${PORT} -t public &
-PHP_PID=$!
+# 1. Nettoyage des caches AVANT tout (rapide, critique)
+echo "🧹 Nettoyage des caches..."
+php artisan optimize:clear 2>/dev/null || true
 
-echo "✅ PHP démarré sur le port ${PORT} (PID: $PHP_PID)"
+# 2. Migrations
+echo "📦 Migrations..."
+php artisan migrate --force --no-interaction 2>/dev/null || echo "⚠️ Migration ignorée (DB pas prête)"
 
-# Attend 3s que PHP soit prêt
-sleep 3
+# 3. Seeder minimal
+php artisan db:seed --class=InterestSeeder --force --no-interaction 2>/dev/null || true
 
-# Setup en arrière-plan (non-bloquant)
-(
-  echo "⚙️ Setup post-démarrage..."
-  php artisan migrate --force --no-interaction 2>&1 || echo "⚠️ Migration échouée"
-  php artisan db:seed --class=InterestSeeder --force --no-interaction 2>&1 || true
-  php artisan storage:link --no-interaction 2>&1 || true
-  php artisan config:clear --no-interaction 2>&1 || true
-  php artisan view:clear --no-interaction 2>&1 || true
-  echo "✅ Setup terminé"
-) &
+# 4. Storage link
+php artisan storage:link --no-interaction 2>/dev/null || true
 
-# Garde PHP en premier plan
-wait $PHP_PID
+echo "✅ Setup terminé. Démarrage PHP sur le port ${PORT}..."
+
+# 5. Démarrage PHP en premier plan
+exec php -S 0.0.0.0:${PORT} -t public
