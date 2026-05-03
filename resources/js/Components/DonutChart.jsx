@@ -84,7 +84,7 @@ export default function DonutChart({ stats, totalLabel = 'OVERALL' }) {
                 ))}
             </div>
 
-            <style dangerouslySetInnerHTML={{ __html: `.font-display { font-family: 'Outfit', sans-serif; }` }} />
+
         </div>
     );
 }

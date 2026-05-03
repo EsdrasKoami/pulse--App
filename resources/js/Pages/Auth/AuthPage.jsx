@@ -198,7 +198,6 @@ export default function AuthPage({ defaultTab = 'register', status, canResetPass
     const switchTab = (next) => {
         if (next === tab) return;
         setTab(next);
-        window.history.replaceState({}, '', next === 'register' ? '/register' : '/login');
     };
 
     return (
@@ -387,11 +386,6 @@ export default function AuthPage({ defaultTab = 'register', status, canResetPass
                     </div>
                 </div>
             </div>
-
-            <style dangerouslySetInnerHTML={{ __html: `
-                @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&display=swap');
-                * { font-family: 'Outfit', sans-serif; }
-            `}} />
         </div>
     );
 }
