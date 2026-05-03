@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+﻿import React, { useState, useRef } from 'react';
 import { usePage, router } from '@inertiajs/react';
 import { useTranslation } from '@/Contexts/LanguageContext';
 
@@ -124,12 +124,7 @@ export default function StoriesBar({ stories = [] }) {
                 </div>
             )}
 
-            <style dangerouslySetInnerHTML={{ __html: `
-                @keyframes storyProgress { from { width: 0%; } to { width: 100%; } }
-                .animate-story-progress { animation: storyProgress 5s linear forwards; }
-                @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-                .animate-fade-in { animation: fadeIn 0.3s ease-out; }
-            `}} />
+            
         </div>
     );
 }

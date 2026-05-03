@@ -1,4 +1,4 @@
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
+﻿import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, Link, usePage } from '@inertiajs/react';
 
 const SettingTile = ({ href, icon, title, description, accent = 'slate' }) => (
@@ -95,7 +95,7 @@ export default function Edit() {
 
             </div>
 
-            <style dangerouslySetInnerHTML={{ __html: `.font-display { font-family: 'Outfit', sans-serif; }` }} />
+            
         </AuthenticatedLayout>
     );
 }

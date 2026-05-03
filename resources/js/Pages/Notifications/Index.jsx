@@ -1,4 +1,4 @@
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
+﻿import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, router, usePage } from '@inertiajs/react';
 
 const TYPE_META = {
@@ -156,18 +156,7 @@ export default function Index({ notifications }) {
                 </div>
             </div>
 
-            <style dangerouslySetInnerHTML={{
-                __html: `
-                @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100;300;400;700;900&display=swap');
-                .font-outfit { font-family: 'Outfit', sans-serif; }
-                .glass-modern { 
-                    background: rgba(255, 255, 255, 0.4);
-                    backdrop-filter: blur(40px);
-                }
-                .dark .glass-modern {
-                    background: rgba(15, 23, 42, 0.5);
-                }
-            `}} />
+            
         </AuthenticatedLayout>
     );
 }

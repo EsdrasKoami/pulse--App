@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 
 export default function StatCard({ label, value, color = 'indigo', trend = null }) {
     const colorThemes = {
@@ -40,7 +40,7 @@ export default function StatCard({ label, value, color = 'indigo', trend = null 
                 )}
             </div>
 
-            <style dangerouslySetInnerHTML={{ __html: `.font-display { font-family: 'Outfit', sans-serif; }` }} />
+            
         </div>
     );
 }

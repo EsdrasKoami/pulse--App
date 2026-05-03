@@ -1,4 +1,4 @@
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
+﻿import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, Link, router, usePage } from '@inertiajs/react';
 import { useState, useEffect, useRef } from 'react';
 
@@ -349,38 +349,7 @@ export default function MessagesIndex({ messages = [], chatUser = null, connecti
                 </div>
             </div>
 
-            <style dangerouslySetInnerHTML={{
-                __html: `
-                .custom-scrollbar::-webkit-scrollbar { width: 4px; }
-                .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-                .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(139, 92, 246, 0.3); border-radius: 10px; }
-                .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: rgba(139, 92, 246, 0.5); }
-                @keyframes fadeInUp {
-                    from { opacity: 0; transform: translate3d(0, 20px, 0); }
-                    to { opacity: 1; transform: translate3d(0, 0, 0); }
-                }
-                .animate-fade-in-up {
-                    animation: fadeInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
-                }
-                .delay-75 { animation-delay: 75ms; }
-                .delay-100 { animation-delay: 100ms; }
-                .delay-150 { animation-delay: 150ms; }
-                .delay-200 { animation-delay: 200ms; }
-                @keyframes float {
-                    0%, 100% { transform: translateY(0) rotate(0deg); }
-                    50% { transform: translateY(-20px) rotate(5deg); }
-                }
-                .animate-float {
-                    animation: float 6s ease-in-out infinite;
-                }
-                @keyframes spin-slow {
-                    from { transform: rotate(0deg); }
-                    to { transform: rotate(360deg); }
-                }
-                .animate-spin-slow {
-                    animation: spin-slow 15s linear infinite;
-                }
-            `}} />
+            
         </AuthenticatedLayout>
     );
 }

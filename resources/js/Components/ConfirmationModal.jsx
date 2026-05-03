@@ -1,4 +1,4 @@
-import Modal from './Modal';
+﻿import Modal from './Modal';
 import { usePage } from '@inertiajs/react';
 
 export default function ConfirmationModal({
@@ -59,7 +59,7 @@ export default function ConfirmationModal({
                 </div>
             </div>
 
-            <style dangerouslySetInnerHTML={{ __html: `.font-display { font-family: 'Outfit', sans-serif; }` }} />
+            
         </Modal>
     );
 }

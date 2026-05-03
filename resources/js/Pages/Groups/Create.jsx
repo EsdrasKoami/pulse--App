@@ -1,4 +1,4 @@
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
+﻿import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, Link, useForm, usePage } from '@inertiajs/react';
 import { useState } from 'react';
 
@@ -170,21 +170,7 @@ export default function Create({ friends = [] }) {
                 </div>
             </div>
 
-            <style dangerouslySetInnerHTML={{
-                __html: `
-                .custom-scrollbar::-webkit-scrollbar { width: 4px; }
-                .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-                .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(139, 92, 246, 0.3); border-radius: 10px; }
-                @keyframes fadeInUp {
-                    from { opacity: 0; transform: translate3d(0, 30px, 0); }
-                    to { opacity: 1; transform: translate3d(0, 0, 0); }
-                }
-                .animate-fade-in-up {
-                    animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
-                }
-                .delay-100 { animation-delay: 100ms; }
-                .delay-200 { animation-delay: 200ms; }
-            `}} />
+            
         </AuthenticatedLayout>
     );
 }

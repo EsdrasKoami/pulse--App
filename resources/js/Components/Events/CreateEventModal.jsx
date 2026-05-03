@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { useForm, usePage } from '@inertiajs/react';
 import Modal from '@/Components/Modal';
 
@@ -111,7 +111,7 @@ export default function CreateEventModal({ isOpen, onClose }) {
                     </div>
                 </form>
             </div>
-            <style dangerouslySetInnerHTML={{ __html: `.font-display { font-family: 'Outfit', sans-serif; }` }} />
+            
         </Modal>
     );
 }

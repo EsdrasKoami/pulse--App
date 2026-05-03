@@ -1,4 +1,4 @@
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
+﻿import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, Link, useForm } from '@inertiajs/react';
 import { useRef, useState } from 'react';
 import InputError from '@/Components/InputError';
@@ -98,7 +98,7 @@ export default function EditDanger() {
                 )}
             </div>
 
-            <style dangerouslySetInnerHTML={{ __html: `.font-display { font-family: 'Outfit', sans-serif; }` }} />
+            
         </AuthenticatedLayout>
     );
 }

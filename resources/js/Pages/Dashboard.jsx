@@ -1,4 +1,4 @@
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
+﻿import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, usePage, router } from '@inertiajs/react';
 import { useState } from 'react';
 import StoriesBar from '@/Components/Social/StoriesBar';
@@ -234,17 +234,7 @@ export default function Dashboard() {
                 </div>
             </div>
 
-            <style dangerouslySetInnerHTML={{
-                __html: `
-                @keyframes fadeInUp {
-                    from { opacity: 0; transform: translate3d(0, 15px, 0); }
-                    to { opacity: 1; transform: translate3d(0, 0, 0); }
-                }
-                .animate-fade-in-up {
-                    animation: fadeInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
-                }
-                .font-display { font-family: 'Outfit', sans-serif; }
-            `}} />
+            
         </AuthenticatedLayout>
     );
 }

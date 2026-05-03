@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 
 export default function EngagementChart({ data, title }) {
     if (!data || data.length === 0) return null;
@@ -107,17 +107,7 @@ export default function EngagementChart({ data, title }) {
                 </svg>
             </div>
 
-            <style dangerouslySetInnerHTML={{
-                __html: `
-                @keyframes pulseSlow {
-                    0%, 100% { opacity: 0.3; }
-                    50% { opacity: 0.5; }
-                }
-                .animate-pulse-slow {
-                    animation: pulseSlow 4s infinite ease-in-out;
-                }
-                .font-display { font-family: 'Outfit', sans-serif; }
-            `}} />
+            
         </div>
     );
 }

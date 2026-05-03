@@ -1,4 +1,4 @@
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
+﻿import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, Link, usePage } from '@inertiajs/react';
 
 export default function Index({ groups = [] }) {
@@ -158,16 +158,7 @@ export default function Index({ groups = [] }) {
                 </div>
             </div>
 
-            <style dangerouslySetInnerHTML={{
-                __html: `
-                @keyframes fadeInUp {
-                    from { opacity: 0; transform: translate3d(0, 30px, 0); }
-                    to { opacity: 1; transform: translate3d(0, 0, 0); }
-                }
-                .animate-fade-in-up {
-                    animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
-                }
-            `}} />
+            
         </AuthenticatedLayout>
     );
 }

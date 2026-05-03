@@ -1,4 +1,4 @@
-import { Link, usePage, router } from '@inertiajs/react';
+﻿import { Link, usePage, router } from '@inertiajs/react';
 import { useState, useEffect } from 'react';
 
 export default function GuestLayout({ children }) {
@@ -48,12 +48,7 @@ export default function GuestLayout({ children }) {
                 </div>
             </div>
 
-            <style dangerouslySetInnerHTML={{
-                __html: `
-                @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-                .animate-fade-in-up { animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) both; }
-                .font-display { font-family: 'Outfit', sans-serif; }
-            `}} />
+            
         </div>
     );
 }

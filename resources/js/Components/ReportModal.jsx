@@ -1,4 +1,4 @@
-import Modal from './Modal';
+﻿import Modal from './Modal';
 import { usePage } from '@inertiajs/react';
 import { useState } from 'react';
 
@@ -66,7 +66,7 @@ export default function ReportModal({
                 </div>
             </form>
 
-            <style dangerouslySetInnerHTML={{ __html: `.font-display { font-family: 'Outfit', sans-serif; }` }} />
+            
         </Modal>
     );
 }

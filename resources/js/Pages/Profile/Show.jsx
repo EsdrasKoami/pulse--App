@@ -1,4 +1,4 @@
-import { Head, Link, router, usePage } from '@inertiajs/react';
+﻿import { Head, Link, router, usePage } from '@inertiajs/react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { useState } from 'react';
 import ConfirmationModal from '@/Components/ConfirmationModal';
@@ -292,7 +292,7 @@ export default function Show({ user, isOwnProfile, isBlocked, hasBlockedMe }) {
                 title={t('Signaler cet utilisateur')}
             />
 
-            <style dangerouslySetInnerHTML={{ __html: `.font-display { font-family: 'Outfit', sans-serif; }` }} />
+            
         </AuthenticatedLayout>
     );
 }

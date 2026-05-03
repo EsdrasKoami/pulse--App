@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { router, usePage } from '@inertiajs/react';
 
 export default function InviteFriendsModal({ event, connections = [], onClose }) {
@@ -112,12 +112,7 @@ export default function InviteFriendsModal({ event, connections = [], onClose })
                     )}
                 </div>
             </div>
-            <style dangerouslySetInnerHTML={{
-                __html: `
-                .custom-scrollbar::-webkit-scrollbar { width: 4px; }
-                .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-                .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(139, 92, 246, 0.3); border-radius: 10px; }
-            `}} />
+            
         </div>
     );
 }

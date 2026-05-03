@@ -1,4 +1,4 @@
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
+﻿import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, Link, useForm, usePage } from '@inertiajs/react';
 import { useState, useRef } from 'react';
 import InputError from '@/Components/InputError';
@@ -179,7 +179,7 @@ export default function EditBio({ mustVerifyEmail, status, allInterests = {} }) 
                 </form>
             </div>
 
-            <style dangerouslySetInnerHTML={{ __html: `.font-display { font-family: 'Outfit', sans-serif; }` }} />
+            
         </AuthenticatedLayout>
     );
 }

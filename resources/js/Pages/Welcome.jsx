@@ -1,4 +1,4 @@
-import { Head, Link, router } from '@inertiajs/react';
+﻿import { Head, Link, router } from '@inertiajs/react';
 import { useState, useEffect } from 'react';
 
 export default function Welcome({ auth, all_translations = {}, locale: initialLocale = 'fr' }) {
@@ -137,11 +137,7 @@ export default function Welcome({ auth, all_translations = {}, locale: initialLo
                 </footer>
             </div>
 
-            <style dangerouslySetInnerHTML={{ __html: `
-                @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-                .animate-fade-in-up { animation: fadeInUp 1s cubic-bezier(0.16, 1, 0.3, 1) both; }
-                .font-display { font-family: 'Outfit', sans-serif; }
-            `}} />
+            
         </>
     );
 }

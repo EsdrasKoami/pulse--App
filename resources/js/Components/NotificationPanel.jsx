@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+﻿import { useEffect, useRef, useState } from 'react';
 import { usePage, router } from '@inertiajs/react';
 
 const TYPE_META = {
@@ -172,13 +172,7 @@ export default function NotificationPanel() {
                 </div>
             )}
 
-            <style dangerouslySetInnerHTML={{
-                __html: `
-                @keyframes panelIn { from { opacity:0; transform:translateY(-8px) scale(0.97); } to { opacity:1; transform:translateY(0) scale(1); } }
-                .no-scrollbar::-webkit-scrollbar { display:none; }
-                .no-scrollbar { -ms-overflow-style:none; scrollbar-width:none; }
-                .font-display { font-family:'Outfit',sans-serif; }
-            `}} />
+            
         </div>
     );
 }

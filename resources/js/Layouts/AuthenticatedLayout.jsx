@@ -1,4 +1,4 @@
-import Dropdown from '@/Components/Dropdown';
+﻿import Dropdown from '@/Components/Dropdown';
 import { Link, usePage } from '@inertiajs/react';
 import { useState, useEffect } from 'react';
 import NavLink from '@/Components/NavLink';
@@ -166,12 +166,7 @@ export default function AuthenticatedLayout({ header, children, hideNavigation =
                 </div>
             )}
 
-            <style dangerouslySetInnerHTML={{
-                __html: `
-                @keyframes fadeInUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-                .animate-fade-in-up { animation: fadeInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) both; }
-                .font-display { font-family: 'Outfit', sans-serif; }
-            `}} />
+            
         </div>
     );
 }

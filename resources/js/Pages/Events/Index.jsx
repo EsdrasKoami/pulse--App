@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, usePage } from '@inertiajs/react';
 import EventCard from '@/Components/Events/EventCard';
@@ -78,7 +78,7 @@ export default function Index({ events, connections }) {
                 onClose={() => setInvitingEvent(null)}
             />
 
-            <style dangerouslySetInnerHTML={{ __html: `.font-display { font-family: 'Outfit', sans-serif; }` }} />
+            
         </AuthenticatedLayout>
     );
 }
