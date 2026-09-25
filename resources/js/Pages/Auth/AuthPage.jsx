@@ -8,8 +8,8 @@ function Input({ id, label, type = 'text', value, onChange, placeholder, autoCom
     const isPassword = type === 'password';
 
     return (
-        <div className="mb-5">
-            <label htmlFor={id} className="block text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 mb-2 ml-1">
+        <div className="mb-6">
+            <label htmlFor={id} className="block text-[11px] font-bold uppercase tracking-[0.15em] text-slate-400 dark:text-slate-500 mb-2.5 ml-1 font-sans">
                 {label}
             </label>
             <div className="relative group">
@@ -20,11 +20,11 @@ function Input({ id, label, type = 'text', value, onChange, placeholder, autoCom
                     value={value || ''}
                     onChange={onChange}
                     placeholder={placeholder}
-                    autoComplete={autoComplete}
-                    className={`w-full bg-white dark:bg-slate-900/80 border-2 rounded-2xl px-5 py-3.5 text-[15px] font-medium placeholder-slate-300 dark:placeholder-slate-700 transition-all outline-none focus:ring-0 dark:text-white
+                    autoComplete={autoComplete || 'off'}
+                    className={`w-full bg-slate-50/50 dark:bg-slate-900/50 border-2 rounded-2xl px-5 py-4 text-[15px] font-semibold placeholder-slate-300 dark:placeholder-slate-700 transition-all outline-none focus:ring-0 dark:text-white font-sans
                         ${error
-                            ? 'border-rose-300 dark:border-rose-800 focus:border-rose-400'
-                            : 'border-slate-100 dark:border-slate-800 focus:border-slate-300 dark:focus:border-slate-600 group-hover:border-slate-200'
+                            ? 'border-rose-400/50 dark:border-rose-900/50 focus:border-rose-500'
+                            : 'border-slate-100 dark:border-slate-800 focus:border-slate-900 dark:focus:border-white group-hover:border-slate-200 dark:group-hover:border-slate-700'
                         }`}
                     style={{ paddingRight: isPassword ? '3.5rem' : undefined }}
                 />
@@ -76,7 +76,7 @@ function SubmitBtn({ label, processing }) {
         <button
             type="submit"
             disabled={processing}
-            className="relative w-full py-4 rounded-2xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-black text-sm tracking-wider active:scale-[0.98] transition-all disabled:opacity-40 mt-6 overflow-hidden group shadow-xl shadow-slate-900/10 dark:shadow-white/5"
+            className="relative w-full py-4.5 rounded-2xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-bold text-[15px] tracking-tight active:scale-[0.98] transition-all disabled:opacity-40 mt-8 overflow-hidden group shadow-2xl shadow-indigo-500/20 dark:shadow-white/10 font-sans"
         >
             <span className="relative z-10 flex items-center justify-center gap-2">
                 {processing && (
@@ -185,14 +185,18 @@ export default function AuthPage({ defaultTab = 'register', status, canResetPass
     const registerForm = useForm({
         name: '',
         email: '',
-        phone: '',
         security_question: '',
         security_answer: '',
         password: '',
         password_confirmation: ''
     });
 
-    useEffect(() => { setMounted(true); }, []);
+    useEffect(() => { 
+        setMounted(true);
+        // Force reset to clear any potential browser pre-fill or Inertia state residue
+        loginForm.reset();
+        registerForm.reset();
+    }, []);
     useEffect(() => { setTab(defaultTab); }, [defaultTab]);
 
     const switchTab = (next) => {
@@ -221,7 +225,7 @@ export default function AuthPage({ defaultTab = 'register', status, canResetPass
 
                         {/* Header */}
                         <div className="mb-8">
-                            <h1 className="text-4xl font-black tracking-tighter leading-tight mb-2">
+                            <h1 className="text-4xl font-black tracking-tighter leading-tight mb-2 bg-gradient-to-br from-slate-900 to-slate-500 dark:from-white dark:to-slate-400 bg-clip-text text-transparent font-display">
                                 {tab === 'login' ? t('Bon retour.') : t('Rejoindre Pulse.')}
                             </h1>
                             <p className="text-slate-500 dark:text-slate-400 text-sm font-medium">
@@ -259,17 +263,18 @@ export default function AuthPage({ defaultTab = 'register', status, canResetPass
                         {tab === 'login' ? (
                             <form onSubmit={e => { e.preventDefault(); loginForm.post(route('login'), { onFinish: () => loginForm.reset('password') }); }}>
                                 <Input
-                                    id="le" label={t('Courriel')} type="email"
+                                    id="login_identity" label={t('Courriel')} type="email"
                                     value={loginForm.data.email}
                                     onChange={e => loginForm.setData('email', e.target.value)}
                                     placeholder="prenom.nom@edu.cegeptr.qc.ca"
                                     error={loginForm.errors.email} autoFocus
                                 />
                                 <Input
-                                    id="lp" label={t('Mot de passe')} type="password"
+                                    id="login_secret" label={t('Mot de passe')} type="password"
                                     value={loginForm.data.password}
                                     onChange={e => loginForm.setData('password', e.target.value)}
                                     placeholder="••••••••"
+                                    autoComplete="current-password"
                                     error={loginForm.errors.password}
                                 />
 
@@ -306,35 +311,50 @@ export default function AuthPage({ defaultTab = 'register', status, canResetPass
                         ) : (
                         /* ── Register Form ── */
                             <form onSubmit={e => { e.preventDefault(); registerForm.post(route('register')); }}>
-                                <Input
-                                    id="rn" label={t('Nom Complet')} type="text"
-                                    value={registerForm.data.name}
-                                    onChange={e => registerForm.setData('name', e.target.value)}
-                                    placeholder="Jean Tremblay"
-                                    error={registerForm.errors.name} autoFocus
-                                />
-
-                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                <div className="space-y-1">
                                     <Input
-                                        id="re" label={t('Courriel')} type="email"
+                                        id="user_email_registration" label={t('Courriel')} type="email"
                                         value={registerForm.data.email}
                                         onChange={e => registerForm.setData('email', e.target.value)}
                                         placeholder="étudiant@cegeptr.qc.ca"
-                                        error={registerForm.errors.email}
+                                        error={registerForm.errors.email} autoFocus
                                     />
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4">
+                                        <Input
+                                            id="password_reg" label={t('Mot de passe')} type="password"
+                                            value={registerForm.data.password}
+                                            onChange={e => registerForm.setData('password', e.target.value)}
+                                            placeholder="••••••••"
+                                            autoComplete="new-password"
+                                            error={registerForm.errors.password}
+                                        />
+                                        <Input
+                                            id="password_confirmation_reg" label={t('Confirmation')} type="password"
+                                            value={registerForm.data.password_confirmation}
+                                            onChange={e => registerForm.setData('password_confirmation', e.target.value)}
+                                            placeholder="••••••••"
+                                            autoComplete="new-password"
+                                            error={registerForm.errors.password_confirmation}
+                                        />
+                                    </div>
+                                </div>
+
+                                <div className="mt-4 pt-4 border-t border-slate-50 dark:border-slate-900">
                                     <Input
-                                        id="rt" label={t('Téléphone (Optionnel)')} type="tel"
-                                        value={registerForm.data.phone}
-                                        onChange={e => registerForm.setData('phone', e.target.value)}
-                                        placeholder="819-123-4567"
-                                        error={registerForm.errors.phone}
+                                        id="rn" label={t('Nom Complet')} type="text"
+                                        value={registerForm.data.name}
+                                        onChange={e => registerForm.setData('name', e.target.value)}
+                                        placeholder="Jean Tremblay"
+                                        error={registerForm.errors.name}
                                     />
                                 </div>
 
                                 {/* Security box */}
-                                <div className="my-2 p-5 bg-slate-50 dark:bg-slate-950/80 rounded-[1.8rem] border border-slate-100 dark:border-slate-800/80">
-                                    <p className="text-[10px] font-black uppercase tracking-[0.25em] text-slate-400 mb-5 flex items-center gap-2">
-                                        <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}><path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
+                                <div className="my-8 p-7 bg-slate-50/50 dark:bg-slate-900/30 rounded-[2.5rem] border border-slate-100 dark:border-slate-800/30 backdrop-blur-sm">
+                                    <p className="text-[10px] font-black uppercase tracking-[0.25em] text-slate-400 mb-6 flex items-center gap-3">
+                                        <div className="w-6 h-6 rounded-xl bg-white dark:bg-slate-800 shadow-sm flex items-center justify-center border border-slate-100 dark:border-slate-700">
+                                            <svg className="w-3 h-3 text-slate-600 dark:text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}><path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
+                                        </div>
                                         {t('Sécurité du compte')}
                                     </p>
                                     <Select
@@ -353,26 +373,11 @@ export default function AuthPage({ defaultTab = 'register', status, canResetPass
                                     />
                                 </div>
 
-                                <Input
-                                    id="rp" label={t('Mot de passe')} type="password"
-                                    value={registerForm.data.password}
-                                    onChange={e => registerForm.setData('password', e.target.value)}
-                                    placeholder="••••••••"
-                                    error={registerForm.errors.password}
-                                />
-                                <Input
-                                    id="rp2" label={t('Confirmation')} type="password"
-                                    value={registerForm.data.password_confirmation}
-                                    onChange={e => registerForm.setData('password_confirmation', e.target.value)}
-                                    placeholder="••••••••"
-                                    error={registerForm.errors.password_confirmation}
-                                />
-
                                 <SubmitBtn label={t('Créer un compte')} processing={registerForm.processing} />
 
-                                <p className="text-center text-xs font-bold text-slate-400 mt-6">
+                                <p className="text-center text-xs font-bold text-slate-400 mt-8">
                                     {t('Déjà inscrit ?')}
-                                    <button type="button" onClick={() => switchTab('login')} className="ml-1 text-slate-900 dark:text-white font-black hover:text-violet-600 dark:hover:text-violet-400 transition-colors">
+                                    <button type="button" onClick={() => switchTab('login')} className="ml-1 text-slate-900 dark:text-white font-black hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
                                         {t('Connexion')}
                                     </button>
                                 </p>

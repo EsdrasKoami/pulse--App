@@ -42,12 +42,12 @@ class HandleInertiaRequests extends Middleware
                 'error' => session('error'),
             ],
             // Optimized: Cache these counts to avoid DB hits on every request
-            'notifications' => $user ? fn() => Cache::remember("user_{$user->id}_notifications_meta", 60, function () use ($user) {
+            'notifications' => $user ? function () use ($user) {
                 return [
                     'unread_count' => $user->unreadNotifications()->count(),
                     'recent' => $user->notifications()->limit(8)->get()
                 ];
-            }) : null,
+            } : null,
 
             'personalStats' => $user ? fn() => Cache::remember("user_{$user->id}_sidebar_stats", 60, function () use ($user) {
                 return [

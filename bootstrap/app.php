@@ -13,7 +13,6 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->web(append: [
             \App\Http\Middleware\SetLocale::class,
-            \App\Http\Middleware\BannedMiddleware::class,
             \App\Http\Middleware\EnsureProfileIsCompleted::class,
             \App\Http\Middleware\HandleInertiaRequests::class,
             \Illuminate\Http\Middleware\AddLinkHeadersForPreloadedAssets::class,
@@ -21,6 +20,7 @@ return Application::configure(basePath: dirname(__DIR__))
 
         $middleware->alias([
             'admin' => \App\Http\Middleware\AdminMiddleware::class,
+            'banned' => \App\Http\Middleware\BannedMiddleware::class,
         ]);
         $middleware->trustProxies(at: '*');
     })

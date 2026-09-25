@@ -64,7 +64,31 @@ class GroupController extends Controller
 
             // Check membership
             if (!$group->members->contains(Auth::id())) {
-                abort(403, 'Vous n\'êtes pas membre de ce groupe.');
+                return redirect()->route('groups.index')->with('error', 'Vous n\'êtes pas membre de ce groupe.');
+            }
+
+            // If admin, get connections to allow adding new members
+            $connections = [];
+            if ($group->creator_id === Auth::id()) {
+                $connections = Auth::user()->sentContactRequests()
+                    ->where('status', '=', 'accepted')
+                    ->with(['receiver'])
+                    ->get()
+                    ->map(fn($req) => $req->receiver)
+                    ->merge(
+                        Auth::user()->receivedContactRequests()
+                            ->where('status', '=', 'accepted')
+                            ->with(['sender'])
+                            ->get()
+                            ->map(fn($req) => $req->sender)
+                    )
+                    ->unique('id')
+                    ->map(fn($u) => [
+                        'id' => $u->id,
+                        'name' => $u->full_name,
+                        'avatar' => $u->avatar,
+                        'role' => $u->programme ?? 'Étudiant'
+                    ])->values();
             }
 
             return Inertia::render('Groups/Show', [
@@ -89,6 +113,7 @@ class GroupController extends Controller
                     'user_name' => $m->user->name,
                     'user_avatar' => $m->user->avatar
                 ]),
+                'connections' => $connections,
                 'is_private' => true
             ]);
         }
@@ -225,7 +250,7 @@ class GroupController extends Controller
         $group = Group::findOrFail($id);
 
         if (!$group->members->contains(Auth::id())) {
-            abort(403, 'Vous n\'êtes pas membre de ce groupe.');
+            return redirect()->route('groups.index')->with('error', 'Vous n\'êtes pas membre de ce groupe.');
         }
 
         $validated = $request->validate([
@@ -238,5 +263,53 @@ class GroupController extends Controller
         ]);
 
         return back();
+    }
+
+    public function update(Request $request, $id)
+    {
+        $group = Group::findOrFail($id);
+
+        if ($group->creator_id !== Auth::id()) {
+            return back()->with('error', 'Seul le créateur peut modifier ce groupe.');
+        }
+
+        $validated = $request->validate([
+            'name' => 'required|string|max:100',
+            'description' => 'nullable|string|max:500',
+            'members' => 'nullable|array',
+            'members.*' => 'exists:users,id'
+        ]);
+
+        $group->update([
+            'name' => $validated['name'],
+            'description' => $validated['description']
+        ]);
+
+        if (isset($validated['members'])) {
+            // Re-attach members while keeping roles or just sync
+            // For simplicity, we sync and ensure creator is always admin
+            $membersToSync = collect($validated['members'])->mapWithKeys(function($id) {
+                return [$id => ['role' => 'member']];
+            })->toArray();
+            
+            $membersToSync[Auth::id()] = ['role' => 'admin'];
+            
+            $group->members()->sync($membersToSync);
+        }
+
+        return back()->with('success', 'Groupe mis à jour !');
+    }
+
+    public function destroy($id)
+    {
+        $group = Group::findOrFail($id);
+
+        if ($group->creator_id !== Auth::id()) {
+            return back()->with('error', 'Seul le créateur peut supprimer ce groupe.');
+        }
+
+        $group->delete();
+
+        return redirect()->route('groups.index')->with('success', 'Groupe supprimé.');
     }
 }

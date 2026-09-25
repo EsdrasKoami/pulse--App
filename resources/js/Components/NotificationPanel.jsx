@@ -1,4 +1,4 @@
-﻿import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { usePage, router } from '@inertiajs/react';
 
 const TYPE_META = {
@@ -35,7 +35,7 @@ export default function NotificationPanel() {
     const panelRef = useRef(null);
 
     const unreadCount = notifications?.unread_count ?? 0;
-    const items = notifications?.recent ?? [];
+    const items = Array.isArray(notifications?.recent) ? notifications.recent : [];
 
     // Auto-poll every 20 seconds
     useEffect(() => {
@@ -111,7 +111,7 @@ export default function NotificationPanel() {
                             >
                                 <div className="relative flex-shrink-0">
                                     {data.sender_avatar
-                                        ? <img src={data.sender_avatar.startsWith('http') || data.sender_avatar.startsWith('/storage/') ? data.sender_avatar : `/storage/${data.sender_avatar}`} className="h-12 w-12 rounded-2xl object-cover" />
+                                        ? <img src={typeof data.sender_avatar === 'string' && (data.sender_avatar.startsWith('http') || data.sender_avatar.startsWith('/storage/')) ? data.sender_avatar : `/storage/${data.sender_avatar}`} className="h-12 w-12 rounded-2xl object-cover" />
                                         : <div className="h-12 w-12 rounded-2xl bg-slate-100 dark:bg-slate-900 flex items-center justify-center font-black text-slate-400">{(data.sender_name ?? '?').charAt(0)}</div>
                                     }
                                     <div className={`absolute -bottom-1 -right-1 h-6 w-6 rounded-full flex items-center justify-center border-2 border-white dark:border-slate-950 ${meta.color}`}>

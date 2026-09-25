@@ -42,7 +42,6 @@ class RegisteredUserController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class , new CegeEmailRule],
-            'phone' => ['nullable', 'string', 'max:20'],
             'security_question' => ['required', 'string', 'max:255'],
             'security_answer' => ['required', 'string', 'max:255'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
@@ -54,7 +53,6 @@ class RegisteredUserController extends Controller
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
-            'phone' => $request->phone,
             'security_question' => $request->security_question,
             'security_answer' => Str::lower(trim($request->security_answer)), // Hashed by model cast
             'password' => $request->password, // Hashed by model cast

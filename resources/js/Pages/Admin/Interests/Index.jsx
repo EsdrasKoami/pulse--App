@@ -1,9 +1,9 @@
-﻿import { Head, useForm, usePage, router } from '@inertiajs/react';
+import { Head, useForm, usePage, router, Link } from '@inertiajs/react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { useState, useEffect } from 'react';
 
 // Composant Toast élégant
-const Toast = ({ message, type = 'success', onClose }) => {
+const NotificationToast = ({ message, type = 'success', onClose }) => {
     useEffect(() => {
         const timer = setTimeout(onClose, 3000);
         return () => clearTimeout(timer);
@@ -67,13 +67,13 @@ export default function Index({ auth, interests }) {
 
     const [editing, setEditing] = useState(null);
     const [showEmojiPicker, setShowEmojiPicker] = useState(false);
-    const [toast, setToast] = useState(null);
+    const [notif, setNotif] = useState(null);
     const [deleteModal, setDeleteModal] = useState({ isOpen: false, id: null });
 
     const commonEmojis = ['🎵', '🎨', '📷', '🍳', '💃', '🎬', '🏃', '⚽', '🚴', '🏊', '🧘', '🎲', '♟️', '🃏', '🖥️', '🎮', '📱', '📚', '✈️', '🤝', '🍕', '🏀', '🎭', '💻', '🧪', '🌱', '🥊', '🎸'];
 
     const notify = (message, type = 'success') => {
-        setToast({ message, type });
+        setNotif({ message, type });
     };
 
     const submit = (e) => {
@@ -131,11 +131,20 @@ export default function Index({ auth, interests }) {
     return (
         <AuthenticatedLayout
             user={auth.user}
-            header={<h2 className="font-display text-2xl font-black tracking-tighter">Catalogue des Hobbies</h2>}
+            header={
+                <div className="flex items-center gap-4">
+                    <Link href={route('dashboard')} className="p-2 rounded-full bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white transition-all shadow-sm">
+                        <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+                        </svg>
+                    </Link>
+                    <h2 className="font-display text-2xl font-black tracking-tighter">Catalogue des Hobbies</h2>
+                </div>
+            }
         >
             <Head title="Admin - Intérêts" />
 
-            {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
+            {notif && <NotificationToast message={notif.message} type={notif.type} onClose={() => setNotif(null)} />}
 
             <ConfirmModal 
                 isOpen={deleteModal.isOpen}

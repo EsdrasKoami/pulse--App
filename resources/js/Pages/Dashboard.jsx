@@ -1,4 +1,4 @@
-﻿import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
+import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, usePage, router } from '@inertiajs/react';
 import { useState } from 'react';
 import StoriesBar from '@/Components/Social/StoriesBar';
@@ -7,6 +7,7 @@ import CreatePost from '@/Components/Social/CreatePost';
 import ProfileCard from '@/Components/ProfileCard';
 import StatCard from '@/Components/StatCard';
 import DonutChart from '@/Components/DonutChart';
+import Dropdown from '@/Components/Dropdown';
 
 import { useTranslation } from '@/Contexts/LanguageContext';
 
@@ -22,11 +23,18 @@ export default function Dashboard() {
     ];
 
     const [searchQuery, setSearchQuery] = useState('');
+    const [interestFilter, setInterestFilter] = useState('all');
     
-    const filteredProfiles = profiles?.filter(p => 
-        p.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
-        p.interests?.some(i => i.name.toLowerCase().includes(searchQuery.toLowerCase()))
-    ) || [];
+    // Extract unique interests for filtering
+    const allInterests = ['all', ...new Set(profiles?.flatMap(p => p.interests).filter(Boolean))];
+
+    const filteredProfiles = profiles?.filter(p => {
+        const name = p.name?.toLowerCase() || '';
+        const query = searchQuery?.toLowerCase() || '';
+        const matchesSearch = name.includes(query);
+        const matchesInterest = interestFilter === 'all' || p.interests?.includes(interestFilter);
+        return matchesSearch && matchesInterest;
+    }) || [];
 
     return (
         <AuthenticatedLayout
@@ -81,26 +89,67 @@ export default function Dashboard() {
                         {view === 'discovering' && (
                             <div className="space-y-8 pb-32">
                                 {/* Real Search Bar */}
-                                <div className="relative group max-w-2xl mx-auto animate-fade-in-up">
-                                    <div className="absolute inset-0 bg-violet-500/10 blur-2xl rounded-[3rem] group-focus-within:bg-violet-500/20 transition-all duration-500"></div>
-                                    <div className="relative flex items-center bg-white/80 dark:bg-slate-900/80 backdrop-blur-3xl border border-white/20 dark:border-slate-800 rounded-[2.5rem] px-6 py-4 shadow-2xl transition-all group-focus-within:border-violet-500/50">
-                                        <svg className="w-6 h-6 text-slate-400 group-focus-within:text-violet-500 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
-                                            <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                                        </svg>
-                                        <input 
-                                            type="text" 
-                                            value={searchQuery}
-                                            onChange={(e) => setSearchQuery(e.target.value)}
-                                            placeholder={t('Chercher par nom ou intérêt (ex: Gaming, Arts...)')} 
-                                            className="flex-1 bg-transparent border-none focus:ring-0 text-lg font-bold text-slate-900 dark:text-white placeholder-slate-400 ml-4 outline-none"
-                                        />
-                                        {searchQuery && (
-                                            <button onClick={() => setSearchQuery('')} className="p-1 hover:bg-slate-100 dark:hover:bg-white/10 rounded-full transition-all">
-                                                <svg className="w-5 h-5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
-                                                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-                                                </svg>
-                                            </button>
-                                        )}
+                                <div className="flex flex-col sm:flex-row items-center gap-4 max-w-4xl mx-auto animate-fade-in-up">
+                                    {/* Search Bar */}
+                                    <div className="relative group flex-1 w-full">
+                                        <div className="absolute inset-0 bg-violet-500/10 blur-2xl rounded-[3rem] group-focus-within:bg-violet-500/20 transition-all duration-500"></div>
+                                        <div className="relative flex items-center bg-white/80 dark:bg-slate-900/80 backdrop-blur-3xl border border-white/20 dark:border-slate-800 rounded-[2.5rem] px-6 py-4 shadow-2xl transition-all group-focus-within:border-violet-500/50">
+                                            <svg className="w-6 h-6 text-slate-400 group-focus-within:text-violet-500 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                                                <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                            </svg>
+                                            <input 
+                                                type="text" 
+                                                value={searchQuery}
+                                                onChange={(e) => setSearchQuery(e.target.value)}
+                                                placeholder={t('Chercher une personne...')} 
+                                                className="flex-1 bg-transparent border-none focus:ring-0 text-lg font-bold text-slate-900 dark:text-white placeholder-slate-400 ml-4 outline-none"
+                                            />
+                                            {searchQuery && (
+                                                <button onClick={() => setSearchQuery('')} className="p-1 hover:bg-slate-100 dark:hover:bg-white/10 rounded-full transition-all">
+                                                    <svg className="w-5 h-5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                                                        <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                                                    </svg>
+                                                </button>
+                                            )}
+                                        </div>
+                                    </div>
+
+                                    {/* Filter Dropdown */}
+                                    <div className="w-full sm:w-auto">
+                                        <Dropdown>
+                                            <Dropdown.Trigger>
+                                                <button className="w-full sm:w-auto flex items-center justify-between gap-3 px-8 py-5 bg-white/80 dark:bg-slate-900/80 backdrop-blur-3xl border border-white/20 dark:border-slate-800 rounded-[2.5rem] shadow-2xl hover:border-violet-500/50 transition-all group">
+                                                    <div className="flex items-center gap-3">
+                                                        <svg className="w-5 h-5 text-slate-400 group-hover:text-violet-500 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                                                            <path strokeLinecap="round" strokeLinejoin="round" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+                                                        </svg>
+                                                        <span className="text-sm font-black text-slate-700 dark:text-slate-200 uppercase tracking-widest">
+                                                            {interestFilter === 'all' ? t('Tous les intérêts') : interestFilter}
+                                                        </span>
+                                                    </div>
+                                                    <svg className="w-4 h-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                                                        <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                                                    </svg>
+                                                </button>
+                                            </Dropdown.Trigger>
+
+                                            <Dropdown.Content align="right" width="64">
+                                                <div className="p-2 max-h-80 overflow-y-auto no-scrollbar">
+                                                    {allInterests.map(interest => (
+                                                        <button
+                                                            key={interest}
+                                                            onClick={() => setInterestFilter(interest)}
+                                                            className={`w-full text-left px-5 py-4 rounded-2xl text-[11px] font-black uppercase tracking-widest transition-all mb-1
+                                                                ${interestFilter === interest 
+                                                                    ? 'bg-violet-600 text-white shadow-lg shadow-violet-600/20' 
+                                                                    : 'text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-white/5'}`}
+                                                        >
+                                                            {interest === 'all' ? t('Tous les intérêts') : interest}
+                                                        </button>
+                                                    ))}
+                                                </div>
+                                            </Dropdown.Content>
+                                        </Dropdown>
                                     </div>
                                 </div>
 

@@ -14,8 +14,25 @@ class UserController extends Controller
     public function index()
     {
         return Inertia::render('Admin/Users/Index', [
-            'users' => User::latest()->paginate(20)
+            'users' => User::select('id', 'name', 'prenom', 'nom', 'email', 'is_admin', 'is_banned', 'ban_reason', 'programme', 'avatar', 'created_at')
+                ->latest()
+                ->paginate(20)
         ]);
+    }
+
+    public function toggleBan(Request $request, User $user)
+    {
+        if ($user->id === auth()->id()) {
+            return back()->with('error', 'Vous ne pouvez pas vous bloquer vous-même.');
+        }
+
+        $user->update([
+            'is_banned' => !$user->is_banned,
+            'ban_reason' => $request->reason ?? ($user->is_banned ? null : 'Violation des conditions d\'utilisation')
+        ]);
+
+        $status = $user->is_banned ? 'bloqué' : 'débloqué';
+        return back()->with('success', "Utilisateur $status avec succès.");
     }
 
     public function create()

@@ -31,6 +31,15 @@ class AuthenticatedSessionController extends Controller
     {
         $request->authenticate();
 
+        if (Auth::user()->is_banned) {
+            $reason = Auth::user()->ban_reason ?? 'Aucune raison spécifiée.';
+            Auth::guard('web')->logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+
+            return redirect()->route('suspended', ['reason' => $reason]);
+        }
+
         $request->session()->regenerate();
 
         return redirect()->intended(route('dashboard', absolute: false));

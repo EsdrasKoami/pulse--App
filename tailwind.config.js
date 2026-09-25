@@ -14,8 +14,8 @@ export default {
     theme: {
         extend: {
             fontFamily: {
-                sans: ['Inter', ...defaultTheme.fontFamily.sans],
-                display: ['Outfit', ...defaultTheme.fontFamily.sans],
+                sans: ['Plus Jakarta Sans', 'Inter', ...defaultTheme.fontFamily.sans],
+                display: ['Bricolage Grotesque', 'Outfit', ...defaultTheme.fontFamily.sans],
             },
             colors: {
                 cegeptr: {

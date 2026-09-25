@@ -9,18 +9,18 @@ COPY resources/ resources/
 COPY public/ public/
 RUN npm run build
 
-# ── Stage 2: PHP 8.4 Alpine — Production server ───────────────────────────────
-FROM php:8.4-fpm-alpine AS app
+# ── Stage 2: PHP 8.4 Alpine — Production / Container server ──────────────────
+FROM php:8.4-cli-alpine AS app
 
-# Alpine packages (much faster than apt-get)
+# Alpine packages & PHP extensions (supports MySQL + SQLite)
 RUN apk add --no-cache \
-    git curl zip unzip bash \
+    git curl zip unzip bash sqlite sqlite-libs \
     libpng-dev libjpeg-turbo-dev freetype-dev \
-    libzip-dev oniguruma-dev icu-dev \
+    libzip-dev oniguruma-dev icu-dev sqlite-dev \
     && docker-php-ext-configure gd \
         --with-freetype --with-jpeg \
     && docker-php-ext-install -j$(nproc) \
-        gd pdo pdo_mysql mbstring zip bcmath intl \
+        gd pdo pdo_mysql pdo_sqlite mbstring zip bcmath intl \
     && rm -rf /var/cache/apk/*
 
 # Composer
@@ -37,19 +37,22 @@ RUN composer install \
     --no-scripts \
     --prefer-dist
 
-# Copy application
+# Copy application source
 COPY . .
 
-# Copy compiled frontend assets
+# Copy compiled frontend assets from frontend stage
 COPY --from=frontend /app/public/build public/build
 
-# Permissions
-RUN chown -R www-data:www-data storage bootstrap/cache \
-    && chmod -R 775 storage bootstrap/cache
+# Setup database & cache permissions
+RUN mkdir -p database storage/framework/cache/data storage/framework/sessions storage/framework/views storage/logs bootstrap/cache \
+    && touch database/database.sqlite \
+    && chown -R www-data:www-data database storage bootstrap/cache \
+    && chmod -R 775 database storage bootstrap/cache
 
 # Startup script
 COPY docker-start.sh /start.sh
 RUN chmod +x /start.sh
 
 EXPOSE 8000
+
 CMD ["/start.sh"]

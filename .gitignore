@@ -4,8 +4,10 @@
 .env.backup
 .env.production
 .env.*
+!.env.example
 .sfdx/
 *.cls
+/scratch
 
 .phpactor.json
 .phpunit.result.cache

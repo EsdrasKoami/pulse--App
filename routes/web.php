@@ -10,13 +10,19 @@ Route::get('/', function () {
     return redirect()->route('dashboard');
 });
 
+Route::get('/suspended', function (Illuminate\Http\Request $request) {
+    return Inertia::render('Auth/Suspended', [
+        'reason' => $request->query('reason')
+    ]);
+})->name('suspended');
+
 Route::get('/dashboard', [\App\Http\Controllers\DashboardController::class, 'index'])
-    ->middleware(['auth'])
+    ->middleware(['auth', 'banned'])
     ->name('dashboard');
 
 Route::post('/language', [\App\Http\Controllers\LanguageController::class, 'store'])->name('language.store');
 
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'banned'])->group(function () {
     // Profile setup wizard (after registration)
     Route::get('/profile/setup', [ProfileSetupController::class, 'show'])->name('profile.setup');
     Route::post('/profile/setup', [ProfileSetupController::class, 'store'])->name('profile.setup.store');
@@ -52,6 +58,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/groups/create', [\App\Http\Controllers\GroupController::class, 'create'])->name('groups.create');
     Route::post('/groups', [\App\Http\Controllers\GroupController::class, 'store'])->name('groups.store');
     Route::get('/groups/{category}', [\App\Http\Controllers\GroupController::class, 'show'])->name('groups.show');
+    Route::patch('/groups/{id}', [\App\Http\Controllers\GroupController::class, 'update'])->name('groups.update');
+    Route::delete('/groups/{id}', [\App\Http\Controllers\GroupController::class, 'destroy'])->name('groups.destroy');
     Route::post('/groups/{id}/messages', [\App\Http\Controllers\GroupController::class, 'storeMessage'])->name('groups.messages.store');
 
     // Social Posts
@@ -75,7 +83,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/users/{user}', [ProfileController::class, 'showUser'])->name('users.show');
 });
 
-Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+Route::middleware(['auth', 'admin', 'banned'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/', [\App\Http\Controllers\Admin\AdminDashboardController::class, 'index'])->name('dashboard');
     Route::get('/users', [\App\Http\Controllers\Admin\UserController::class, 'index'])->name('users.index');
     Route::get('/users/create', [\App\Http\Controllers\Admin\UserController::class, 'create'])->name('users.create');
@@ -83,6 +91,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('/users/{user}/edit', [\App\Http\Controllers\Admin\UserController::class, 'edit'])->name('users.edit');
     Route::patch('/users/{user}', [\App\Http\Controllers\Admin\UserController::class, 'update'])->name('users.update');
     Route::delete('/users/{user}', [\App\Http\Controllers\Admin\UserController::class, 'destroy'])->name('users.destroy');
+    Route::post('/users/{user}/toggle-ban', [\App\Http\Controllers\Admin\UserController::class, 'toggleBan'])->name('users.toggle-ban');
 
     Route::get('/interests', [\App\Http\Controllers\Admin\InterestController::class, 'index'])->name('interests.index');
     Route::post('/interests', [\App\Http\Controllers\Admin\InterestController::class, 'store'])->name('interests.store');

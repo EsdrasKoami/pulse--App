@@ -17,13 +17,17 @@ class BannedMiddleware
     public function handle(Request $request, Closure $next): Response
     {
         if (Auth::check() && Auth::user()->is_banned) {
-            $reason = Auth::user()->ban_reason ? ': ' . Auth::user()->ban_reason : '.';
-            Auth::logout();
+            if ($request->routeIs('suspended')) {
+                return $next($request);
+            }
+
+            $reason = Auth::user()->ban_reason;
+            Auth::guard('web')->logout();
 
             $request->session()->invalidate();
             $request->session()->regenerateToken();
 
-            return redirect()->route('login')->with('error', 'Votre compte a été banni' . $reason);
+            return redirect()->route('suspended', ['reason' => $reason]);
         }
 
         return $next($request);
