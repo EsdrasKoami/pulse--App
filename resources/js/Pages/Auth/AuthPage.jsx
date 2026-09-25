@@ -8,8 +8,8 @@ function Input({ id, label, type = 'text', value, onChange, placeholder, autoCom
     const isPassword = type === 'password';
 
     return (
-        <div className="mb-6">
-            <label htmlFor={id} className="block text-[11px] font-bold uppercase tracking-[0.15em] text-slate-400 dark:text-slate-500 mb-2.5 ml-1 font-sans">
+        <div className="mb-5">
+            <label htmlFor={id} className="block text-[11px] font-bold uppercase tracking-[0.15em] text-slate-500 dark:text-slate-400 mb-2 ml-1 font-sans">
                 {label}
             </label>
             <div className="relative group">
@@ -19,12 +19,12 @@ function Input({ id, label, type = 'text', value, onChange, placeholder, autoCom
                     type={isPassword && show ? 'text' : type}
                     value={value || ''}
                     onChange={onChange}
-                    placeholder={placeholder}
+                    placeholder={placeholder || undefined}
                     autoComplete={autoComplete || 'off'}
-                    className={`w-full bg-slate-50/50 dark:bg-slate-900/50 border-2 rounded-2xl px-5 py-4 text-[15px] font-semibold placeholder-slate-300 dark:placeholder-slate-700 transition-all outline-none focus:ring-0 dark:text-white font-sans
+                    className={`w-full bg-slate-50/70 dark:bg-slate-900/60 border rounded-2xl px-5 py-4 text-[15px] font-semibold transition-all outline-none dark:text-white font-sans
                         ${error
-                            ? 'border-rose-400/50 dark:border-rose-900/50 focus:border-rose-500'
-                            : 'border-slate-100 dark:border-slate-800 focus:border-slate-900 dark:focus:border-white group-hover:border-slate-200 dark:group-hover:border-slate-700'
+                            ? 'border-rose-400 dark:border-rose-800 focus:border-rose-500 focus:ring-4 focus:ring-rose-500/10'
+                            : 'border-slate-200 dark:border-slate-800 focus:border-slate-900 dark:focus:border-white focus:bg-white dark:focus:bg-black focus:ring-4 focus:ring-slate-900/5 dark:focus:ring-white/5 group-hover:border-slate-300 dark:group-hover:border-slate-700'
                         }`}
                     style={{ paddingRight: isPassword ? '3.5rem' : undefined }}
                 />
@@ -33,7 +33,8 @@ function Input({ id, label, type = 'text', value, onChange, placeholder, autoCom
                         type="button"
                         tabIndex={-1}
                         onClick={() => setShow(v => !v)}
-                        className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-300 hover:text-slate-600 dark:hover:text-slate-300 transition-colors"
+                        className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors p-1"
+                        aria-label={show ? "Masquer" : "Afficher"}
                     >
                         {show
                             ? <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M13.875 18.825A10.05 10.05 0 0112 19c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24" /><path d="M1 1l22 22" /></svg>
@@ -266,14 +267,12 @@ export default function AuthPage({ defaultTab = 'register', status, canResetPass
                                     id="login_identity" label={t('Courriel')} type="email"
                                     value={loginForm.data.email}
                                     onChange={e => loginForm.setData('email', e.target.value)}
-                                    placeholder="prenom.nom@edu.cegeptr.qc.ca"
                                     error={loginForm.errors.email} autoFocus
                                 />
                                 <Input
                                     id="login_secret" label={t('Mot de passe')} type="password"
                                     value={loginForm.data.password}
                                     onChange={e => loginForm.setData('password', e.target.value)}
-                                    placeholder="••••••••"
                                     autoComplete="current-password"
                                     error={loginForm.errors.password}
                                 />
@@ -316,7 +315,6 @@ export default function AuthPage({ defaultTab = 'register', status, canResetPass
                                         id="user_email_registration" label={t('Courriel')} type="email"
                                         value={registerForm.data.email}
                                         onChange={e => registerForm.setData('email', e.target.value)}
-                                        placeholder="étudiant@cegeptr.qc.ca"
                                         error={registerForm.errors.email} autoFocus
                                     />
                                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4">
@@ -324,7 +322,6 @@ export default function AuthPage({ defaultTab = 'register', status, canResetPass
                                             id="password_reg" label={t('Mot de passe')} type="password"
                                             value={registerForm.data.password}
                                             onChange={e => registerForm.setData('password', e.target.value)}
-                                            placeholder="••••••••"
                                             autoComplete="new-password"
                                             error={registerForm.errors.password}
                                         />
@@ -332,7 +329,6 @@ export default function AuthPage({ defaultTab = 'register', status, canResetPass
                                             id="password_confirmation_reg" label={t('Confirmation')} type="password"
                                             value={registerForm.data.password_confirmation}
                                             onChange={e => registerForm.setData('password_confirmation', e.target.value)}
-                                            placeholder="••••••••"
                                             autoComplete="new-password"
                                             error={registerForm.errors.password_confirmation}
                                         />
@@ -344,7 +340,6 @@ export default function AuthPage({ defaultTab = 'register', status, canResetPass
                                         id="rn" label={t('Nom Complet')} type="text"
                                         value={registerForm.data.name}
                                         onChange={e => registerForm.setData('name', e.target.value)}
-                                        placeholder="Jean Tremblay"
                                         error={registerForm.errors.name}
                                     />
                                 </div>
@@ -368,7 +363,6 @@ export default function AuthPage({ defaultTab = 'register', status, canResetPass
                                         id="sa" label={t('Réponse')}
                                         value={registerForm.data.security_answer}
                                         onChange={e => registerForm.setData('security_answer', e.target.value)}
-                                        placeholder="Votre réponse secrète"
                                         error={registerForm.errors.security_answer}
                                     />
                                 </div>

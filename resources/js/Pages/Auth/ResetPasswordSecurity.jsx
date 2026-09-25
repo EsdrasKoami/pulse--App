@@ -76,8 +76,7 @@ export default function ResetPasswordSecurity() {
                                         type="email"
                                         value={data.email}
                                         onChange={e => setData('email', e.target.value)}
-                                        placeholder="prenom.nom@edu.cegeptr.qc.ca"
-                                        className={`w-full bg-slate-50 dark:bg-slate-950 border border-slate-100 dark:border-slate-800 rounded-2xl p-4 text-[15px] font-medium transition-all ${errors.email ? 'border-rose-500/50' : ''}`}
+                                        className={`w-full bg-slate-50/70 dark:bg-slate-950 border rounded-2xl p-4 text-[15px] font-semibold transition-all outline-none dark:text-white ${errors.email ? 'border-rose-400 dark:border-rose-800' : 'border-slate-200 dark:border-slate-800 focus:border-slate-900 dark:focus:border-white focus:bg-white dark:focus:bg-black focus:ring-4 focus:ring-slate-900/5 dark:focus:ring-white/5'}`}
                                         autoFocus
                                     />
                                     {errors.email && <p className="text-[11px] font-bold text-rose-500 mt-2 ml-1">{errors.email}</p>}
@@ -108,8 +107,7 @@ export default function ResetPasswordSecurity() {
                                         type="text"
                                         value={data.security_answer}
                                         onChange={e => setData('security_answer', e.target.value)}
-                                        placeholder="Réponse secrète"
-                                        className={`w-full bg-slate-50 dark:bg-slate-950 border border-slate-100 dark:border-slate-800 rounded-2xl p-4 text-[15px] font-medium transition-all ${errors.security_answer ? 'border-rose-500/50' : ''}`}
+                                        className={`w-full bg-slate-50/70 dark:bg-slate-950 border rounded-2xl p-4 text-[15px] font-semibold transition-all outline-none dark:text-white ${errors.security_answer ? 'border-rose-400 dark:border-rose-800' : 'border-slate-200 dark:border-slate-800 focus:border-slate-900 dark:focus:border-white focus:bg-white dark:focus:bg-black focus:ring-4 focus:ring-slate-900/5 dark:focus:ring-white/5'}`}
                                         autoFocus
                                     />
                                     {errors.security_answer && <p className="text-[11px] font-bold text-rose-500 mt-2 ml-1">{errors.security_answer}</p>}
@@ -123,8 +121,7 @@ export default function ResetPasswordSecurity() {
                                         type="password"
                                         value={data.password}
                                         onChange={e => setData('password', e.target.value)}
-                                        placeholder="••••••••"
-                                        className={`w-full bg-slate-50 dark:bg-slate-950 border border-slate-100 dark:border-slate-800 rounded-2xl p-4 text-[15px] font-medium transition-all ${errors.password ? 'border-rose-500/50' : ''}`}
+                                        className={`w-full bg-slate-50/70 dark:bg-slate-950 border rounded-2xl p-4 text-[15px] font-semibold transition-all outline-none dark:text-white ${errors.password ? 'border-rose-400 dark:border-rose-800' : 'border-slate-200 dark:border-slate-800 focus:border-slate-900 dark:focus:border-white focus:bg-white dark:focus:bg-black focus:ring-4 focus:ring-slate-900/5 dark:focus:ring-white/5'}`}
                                     />
                                     {errors.password && <p className="text-[11px] font-bold text-rose-500 mt-2 ml-1">{errors.password}</p>}
                                 </div>
@@ -137,8 +134,7 @@ export default function ResetPasswordSecurity() {
                                         type="password"
                                         value={data.password_confirmation}
                                         onChange={e => setData('password_confirmation', e.target.value)}
-                                        placeholder="••••••••"
-                                        className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-100 dark:border-slate-800 rounded-2xl p-4 text-[15px] font-medium transition-all"
+                                        className="w-full bg-slate-50/70 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 focus:border-slate-900 dark:focus:border-white focus:bg-white dark:focus:bg-black focus:ring-4 focus:ring-slate-900/5 dark:focus:ring-white/5 rounded-2xl p-4 text-[15px] font-semibold transition-all outline-none dark:text-white"
                                     />
                                 </div>
 

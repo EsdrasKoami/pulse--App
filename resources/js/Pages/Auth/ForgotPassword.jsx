@@ -48,8 +48,7 @@ export default function ForgotPassword({ status }) {
                                 type="email"
                                 value={data.email}
                                 onChange={e => setData('email', e.target.value)}
-                                placeholder="prenom.nom@edu.cegeptr.qc.ca"
-                                className={`w-full bg-slate-50 dark:bg-slate-950 border border-slate-100 dark:border-slate-800 rounded-2xl p-4 text-[15px] font-medium placeholder-slate-300 focus:ring-2 focus:ring-black/5 dark:focus:ring-white/5 focus:border-slate-300 dark:focus:border-slate-600 transition-all ${errors.email ? 'border-rose-500/50' : ''}`}
+                                className={`w-full bg-slate-50/70 dark:bg-slate-950 border rounded-2xl p-4 text-[15px] font-semibold transition-all outline-none dark:text-white ${errors.email ? 'border-rose-400 dark:border-rose-800' : 'border-slate-200 dark:border-slate-800 focus:border-slate-900 dark:focus:border-white focus:bg-white dark:focus:bg-black focus:ring-4 focus:ring-slate-900/5 dark:focus:ring-white/5'}`}
                                 autoFocus
                             />
                             {errors.email && <p className="text-[11px] font-bold text-rose-500 mt-2 ml-1">{errors.email}</p>}
