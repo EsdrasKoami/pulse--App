@@ -128,12 +128,25 @@ class MessageController extends Controller
             'content' => 'required|string|max:2000'
         ]);
 
-        if (Auth::user()->hasBlocked($user->id) || $user->hasBlocked(Auth::id())) {
+        $authUserId = Auth::id();
+
+        if (Auth::user()->hasBlocked($user->id) || $user->hasBlocked($authUserId)) {
             abort(403, 'Communication impossible.');
         }
 
+        // Security check: ensure an accepted connection exists
+        $isConnected = ContactRequest::where(function ($q) use ($user, $authUserId) {
+            $q->where('sender_id', $authUserId)->where('receiver_id', $user->id);
+        })->orWhere(function ($q) use ($user, $authUserId) {
+            $q->where('sender_id', $user->id)->where('receiver_id', $authUserId);
+        })->where('status', 'accepted')->exists();
+
+        if (!$isConnected) {
+            abort(403, 'Vous devez être connecté avec cet utilisateur pour lui envoyer un message.');
+        }
+
         Message::create([
-            'sender_id' => Auth::id(),
+            'sender_id' => $authUserId,
             'receiver_id' => $user->id,
             'content' => $validated['content'],
             'is_read' => false

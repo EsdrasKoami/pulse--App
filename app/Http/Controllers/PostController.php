@@ -71,6 +71,10 @@ class PostController extends Controller
 
     public function storeComment(Request $request, Post $post)
     {
+        if (Auth::user()->hasBlocked($post->user_id) || $post->user->hasBlocked(Auth::id())) {
+            abort(403, 'Action non autorisée.');
+        }
+
         $request->validate([
             'content' => 'required|string|max:500'
         ]);
@@ -89,6 +93,10 @@ class PostController extends Controller
 
     public function toggleLike(Post $post)
     {
+        if (Auth::user()->hasBlocked($post->user_id) || $post->user->hasBlocked(Auth::id())) {
+            abort(403, 'Action non autorisée.');
+        }
+
         /** @var \App\Models\User $user */
         $user = Auth::user();
         $like = $post->likes()->where('user_id', $user->id)->first();
